@@ -817,6 +817,7 @@ void Blaster_Fire (edict_t *ent, vec3_t g_offset, int damage, qboolean hyper, in
 {
 	vec3_t	forward, right;
 	vec3_t	start;
+	vec3_t  startRadial;
 	vec3_t	offset;
 
 	if (is_quad)
@@ -830,6 +831,16 @@ void Blaster_Fire (edict_t *ent, vec3_t g_offset, int damage, qboolean hyper, in
 	ent->client->kick_angles[0] = -1;
 
 	fire_blaster (ent, start, forward, damage, 1000, effect, hyper);
+	
+	for (int i = 0; i < 50; i++)
+	{
+		VectorCopy(start, startRadial);
+		startRadial[1] = startRadial[1] + cos(i) * 20;
+		startRadial[2] = startRadial[2] + sin(i) * 20;
+		fire_blaster(ent, startRadial, forward, damage, 1000, effect, hyper);
+		//gi.dprintf("Fired at %lf, %lf\n", cos(i), sin(i));
+
+	}
 
 	// send muzzle flash
 	gi.WriteByte (svc_muzzleflash);
