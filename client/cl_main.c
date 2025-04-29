@@ -1525,6 +1525,11 @@ void CL_InitLocal (void)
 	// forwarded to the server
 	Cmd_AddCommand ("wave", NULL);
 	Cmd_AddCommand ("inven", NULL);
+	Cmd_AddCommand("selectwar", NULL);
+	Cmd_AddCommand("selecttact", NULL);
+	Cmd_AddCommand("selecttank", NULL);
+	Cmd_AddCommand("selectsnipe", NULL);
+	Cmd_AddCommand("selectmedic", NULL);
 	Cmd_AddCommand ("kill", NULL);
 	Cmd_AddCommand ("use", NULL);
 	Cmd_AddCommand ("drop", NULL);

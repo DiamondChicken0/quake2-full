@@ -106,6 +106,15 @@ typedef enum
 	AMMO_SLUGS
 } ammo_t;
 
+typedef enum //*()
+{
+	NOTHING,
+	CLASS_WAR,
+	CLASS_TACT,
+	CLASS_TANK,
+	CLASS_SNIPE,
+	CLASS_MEDIC
+} player_type;
 
 //deadflag
 #define DEAD_NO					0
@@ -844,6 +853,7 @@ typedef struct
 	int			selected_item;
 	int			inventory[MAX_ITEMS];
 
+
 	// ammo capacities
 	int			max_bullets;
 	int			max_shells;
@@ -862,6 +872,9 @@ typedef struct
 	int			helpchanged;
 
 	qboolean	spectator;			// client is a spectator
+
+	player_type selected_class;
+	player_type queued_class_change;
 } client_persistant_t;
 
 // client data that stays across deathmatch respawns

@@ -899,6 +899,32 @@ void Cmd_PlayerList_f(edict_t *ent)
 	gi.cprintf(ent, PRINT_HIGH, "%s", text);
 }
 
+void Cmd_SelectWar(edict_t* ent)
+{
+	ent->client->pers.queued_class_change = CLASS_WAR;
+	gi.cprintf(ent, PRINT_HIGH, "You will spawn in as the Warrior Class on death");
+}
+
+void Cmd_SelectTact(edict_t* ent)
+{
+	ent->client->pers.queued_class_change = CLASS_TACT;
+	gi.cprintf(ent, PRINT_HIGH, "You will spawn in as the Tactical Class on death");
+}
+void Cmd_SelectTank(edict_t* ent)
+{
+	ent->client->pers.queued_class_change = CLASS_TANK;
+	gi.cprintf(ent, PRINT_HIGH, "You will spawn in as the Tank Class on death");
+}
+void Cmd_SelectSnipe(edict_t* ent)
+{
+	ent->client->pers.queued_class_change = CLASS_SNIPE;
+	gi.cprintf(ent, PRINT_HIGH, "You will spawn in as the Sniper Class on death");
+}
+void Cmd_SelectMedic(edict_t* ent)
+{
+	ent->client->pers.queued_class_change = CLASS_MEDIC;
+	gi.cprintf(ent, PRINT_HIGH, "You will spawn in as the Medic Class on death");
+}
 
 /*
 =================
@@ -987,6 +1013,16 @@ void ClientCommand (edict_t *ent)
 		Cmd_Wave_f (ent);
 	else if (Q_stricmp(cmd, "playerlist") == 0)
 		Cmd_PlayerList_f(ent);
+	else if (Q_stricmp(cmd, "selectwar") == 0)
+		Cmd_SelectWar(ent);
+	else if (Q_stricmp(cmd, "selecttact") == 0)
+		Cmd_SelectTact(ent);
+	else if (Q_stricmp(cmd, "selecttank") == 0)
+		Cmd_SelectTank(ent);
+	else if (Q_stricmp(cmd, "selectsnipe") == 0)
+		Cmd_SelectSnipe(ent);
+	else if (Q_stricmp(cmd, "selectmedic") == 0)
+		Cmd_SelectMedic(ent);
 	else	// anything that doesn't match a command will be a chat
 		Cmd_Say_f (ent, false, true);
 }

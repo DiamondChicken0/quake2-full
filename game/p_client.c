@@ -606,25 +606,86 @@ but is called after each death and level change in deathmatch
 */
 void InitClientPersistant (gclient_t *client)
 {
+	// HIJACK THIS FUNCTION FOR SPAWNING PLAYER AS A CLASS *()
+
+	// for getting inventory 
+	// ent->client->pers.inventory[ITEM_INDEX(FindItem("slugs"))]
 	gitem_t		*item;
+	player_type currClass;
+	
+	if (client->pers.queued_class_change != NOTHING)
+		client->pers.selected_class = client->pers.queued_class_change;
+	client->pers.queued_class_change = NOTHING;
 
+	currClass = client->pers.selected_class;
+	//currClass = CLASS_WAR;
+	
 	memset (&client->pers, 0, sizeof(client->pers));
+	
+	client->pers.selected_class = currClass;
+	client->pers.health = 100;
+	client->pers.max_health = 100;
 
-	item = FindItem("Blaster");
+	client->pers.max_bullets = 200;
+	client->pers.max_shells = 100;
+	client->pers.max_rockets = 50;
+	client->pers.max_grenades = 50;
+	client->pers.max_cells = 200;
+	client->pers.max_slugs = 50;
+	switch (currClass)
+	{
+	case CLASS_WAR:
+		item = FindItem("super shotgun");
+		client->pers.health = 150;
+		client->pers.max_health = 150;
+		client->pers.max_shells = 200;
+		client->pers.inventory[ITEM_INDEX(FindItem("shells"))] = 200;
+		break;
+	case CLASS_TACT:
+		item = FindItem("machinegun");
+		client->pers.health = 100;
+		client->pers.max_health = 100;
+		client->pers.max_bullets = 600;
+		client->pers.inventory[ITEM_INDEX(FindItem("bullets"))] = 600;
+		break;
+	case CLASS_TANK:
+		item = FindItem("chaingun");
+		client->pers.health = 200;
+		client->pers.max_health = 200;
+		client->pers.max_bullets = 1000;
+		client->pers.inventory[ITEM_INDEX(FindItem("bullets"))] = 1000;
+		break;
+	case CLASS_SNIPE:
+		item = FindItem("railgun");
+		client->pers.health = 75;
+		client->pers.max_health = 75;
+		client->pers.max_slugs = 200;
+		client->pers.inventory[ITEM_INDEX(FindItem("slugs"))] = 200;
+		break;
+	case CLASS_MEDIC:
+		item = FindItem("blaster");
+		client->pers.health = 75;
+		client->pers.max_health = 75;
+		break;
+	default:
+		item = FindItem("blaster");
+		client->pers.health = 100;
+		client->pers.max_health = 100;
+		//if (client)
+			//gi.cprintf(client, PRINT_HIGH, "Client has died or connected with no associated class\n");
+		item = FindItem("chaingun");
+		client->pers.inventory[ITEM_INDEX(FindItem("bullets"))] = 200;
+	}
+
 	client->pers.selected_item = ITEM_INDEX(item);
 	client->pers.inventory[client->pers.selected_item] = 1;
 
 	client->pers.weapon = item;
 
-	client->pers.health			= 100;
-	client->pers.max_health		= 100;
 
-	client->pers.max_bullets	= 200;
-	client->pers.max_shells		= 100;
-	client->pers.max_rockets	= 50;
-	client->pers.max_grenades	= 50;
-	client->pers.max_cells		= 200;
-	client->pers.max_slugs		= 50;
+	/*gitem_t* ammo = FindItem("Bullets");
+	ammo->quantity = 200;
+	Add_Ammo(client, ammo, 200);*/
 
 	client->pers.connected = true;
 }
