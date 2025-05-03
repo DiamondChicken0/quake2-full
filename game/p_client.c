@@ -606,15 +606,20 @@ but is called after each death and level change in deathmatch
 */
 void InitClientPersistant (gclient_t *client)
 {
-	// HIJACK THIS FUNCTION FOR SPAWNING PLAYER AS A CLASS *()
+	// HIJACK THIS FUNCTION FOR SPAWNING PLAYER AS A CLASS //*()
 
 	// for getting inventory 
 	// ent->client->pers.inventory[ITEM_INDEX(FindItem("slugs"))]
 	gitem_t		*item;
 	player_type currClass;
+	int level = client->pers.level;
 	
 	if (client->pers.queued_class_change != NOTHING)
+	{
+		level = 1;
 		client->pers.selected_class = client->pers.queued_class_change;
+	}
+
 	client->pers.queued_class_change = NOTHING;
 
 	currClass = client->pers.selected_class;
@@ -622,10 +627,10 @@ void InitClientPersistant (gclient_t *client)
 	
 	memset (&client->pers, 0, sizeof(client->pers));
 	
+	client->pers.level = level;
 	client->pers.selected_class = currClass;
 	client->pers.health = 100;
 	client->pers.max_health = 100;
-
 	client->pers.max_bullets = 200;
 	client->pers.max_shells = 100;
 	client->pers.max_rockets = 50;
@@ -671,10 +676,10 @@ void InitClientPersistant (gclient_t *client)
 		item = FindItem("blaster");
 		client->pers.health = 100;
 		client->pers.max_health = 100;
-		//if (client)
+		//if (client) THIS CRASHES THE GAME
 			//gi.cprintf(client, PRINT_HIGH, "Client has died or connected with no associated class\n");
-		item = FindItem("chaingun");
-		client->pers.inventory[ITEM_INDEX(FindItem("bullets"))] = 200;
+		//item = FindItem("chaingun");
+		//client->pers.inventory[ITEM_INDEX(FindItem("bullets"))] = 200;
 	}
 
 	client->pers.selected_item = ITEM_INDEX(item);
@@ -1656,10 +1661,11 @@ void ClientThink (edict_t *ent, usercmd_t *ucmd)
 		client->resp.cmd_angles[1] = SHORT2ANGLE(ucmd->angles[1]);
 		client->resp.cmd_angles[2] = SHORT2ANGLE(ucmd->angles[2]);
 
-	} else {
+	}
+	else {
 
 		// set up for pmove
-		memset (&pm, 0, sizeof(pm));
+		memset(&pm, 0, sizeof(pm));
 
 		if (ent->movetype == MOVETYPE_NOCLIP)
 			client->ps.pmove.pm_type = PM_SPECTATOR;
@@ -1673,16 +1679,16 @@ void ClientThink (edict_t *ent, usercmd_t *ucmd)
 		client->ps.pmove.gravity = sv_gravity->value;
 		pm.s = client->ps.pmove;
 
-		for (i=0 ; i<3 ; i++)
+		for (i = 0; i < 3; i++)
 		{
-			pm.s.origin[i] = ent->s.origin[i]*8;
-			pm.s.velocity[i] = ent->velocity[i]*8;
+			pm.s.origin[i] = ent->s.origin[i] * 8;
+			pm.s.velocity[i] = ent->velocity[i] * 8;
 		}
 
 		if (memcmp(&client->old_pmove, &pm.s, sizeof(pm.s)))
 		{
 			pm.snapinitial = true;
-	//		gi.dprintf ("pmove changed!\n");
+			//		gi.dprintf ("pmove changed!\n");
 		}
 
 		pm.cmd = *ucmd;
@@ -1691,20 +1697,20 @@ void ClientThink (edict_t *ent, usercmd_t *ucmd)
 		pm.pointcontents = gi.pointcontents;
 
 		// perform a pmove
-		gi.Pmove (&pm);
+		gi.Pmove(&pm);
 
 		// save results of pmove
 		client->ps.pmove = pm.s;
 		client->old_pmove = pm.s;
 
-		for (i=0 ; i<3 ; i++)
+		for (i = 0; i < 3; i++)
 		{
-			ent->s.origin[i] = pm.s.origin[i]*0.125;
-			ent->velocity[i] = pm.s.velocity[i]*0.125;
+			ent->s.origin[i] = pm.s.origin[i] * 0.125;
+			ent->velocity[i] = pm.s.velocity[i] * 0.125;
 		}
 
-		VectorCopy (pm.mins, ent->mins);
-		VectorCopy (pm.maxs, ent->maxs);
+		VectorCopy(pm.mins, ent->mins);
+		VectorCopy(pm.maxs, ent->maxs);
 
 		client->resp.cmd_angles[0] = SHORT2ANGLE(ucmd->angles[0]);
 		client->resp.cmd_angles[1] = SHORT2ANGLE(ucmd->angles[1]);
@@ -1731,29 +1737,28 @@ void ClientThink (edict_t *ent, usercmd_t *ucmd)
 		}
 		else
 		{
-			VectorCopy (pm.viewangles, client->v_angle);
-			VectorCopy (pm.viewangles, client->ps.viewangles);
+			VectorCopy(pm.viewangles, client->v_angle);
+			VectorCopy(pm.viewangles, client->ps.viewangles);
 		}
 
-		gi.linkentity (ent);
+		gi.linkentity(ent);
 
 		if (ent->movetype != MOVETYPE_NOCLIP)
-			G_TouchTriggers (ent);
+			G_TouchTriggers(ent);
 
 		// touch other objects
-		for (i=0 ; i<pm.numtouch ; i++)
+		for (i = 0; i < pm.numtouch; i++)
 		{
 			other = pm.touchents[i];
-			for (j=0 ; j<i ; j++)
+			for (j = 0; j < i; j++)
 				if (pm.touchents[j] == other)
 					break;
 			if (j != i)
 				continue;	// duplicated
 			if (!other->touch)
 				continue;
-			other->touch (other, ent, NULL, NULL);
+			other->touch(other, ent, NULL, NULL);
 		}
-
 	}
 
 	client->oldbuttons = client->buttons;
@@ -1801,6 +1806,28 @@ void ClientThink (edict_t *ent, usercmd_t *ucmd)
 		other = g_edicts + i;
 		if (other->inuse && other->client->chase_target == ent)
 			UpdateChaseCam(other);
+	}
+
+	if (ent->client->pers.selected_class == CLASS_TANK && ent->client->pers.abilityActive && ent->client->pers.abilityTime + 10 < level.time)
+	{
+		gitem_armor_t* info;
+		gitem_t* it;
+		gitem_t* tmp;
+		ent->client->pers.abilityActive = false;
+
+		tmp = FindItem("Jacket Armor");
+		if (ent->client->pers.inventory[ITEM_INDEX(tmp)])
+			it = FindItem("Jacket Armor");
+		tmp = FindItem("Combat Armor");
+		if (ent->client->pers.inventory[ITEM_INDEX(tmp)])
+			it = FindItem("Combat Armor");
+		tmp = FindItem("Body Armor");
+		if (ent->client->pers.inventory[ITEM_INDEX(tmp)])
+			it = FindItem("Body Armor");
+
+		if (it)
+			ent->client->pers.inventory[ITEM_INDEX(it)] =
+				ent->client->pers.inventory[ITEM_INDEX(it)] - 40 > 0 ? ent->client->pers.inventory[ITEM_INDEX(it)] - 40 : 0;
 	}
 }
 

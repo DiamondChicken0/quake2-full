@@ -873,8 +873,13 @@ typedef struct
 
 	qboolean	spectator;			// client is a spectator
 
+	//mod //*()
 	player_type selected_class;
 	player_type queued_class_change;
+	int level;
+	float abilityTime;
+	float ogSpeed;
+	qboolean abilityActive;
 } client_persistant_t;
 
 // client data that stays across deathmatch respawns
@@ -1020,6 +1025,8 @@ struct edict_s
 	char		*message;
 	char		*classname;
 	int			spawnflags;
+
+	int			exp;
 
 	float		timestamp;
 

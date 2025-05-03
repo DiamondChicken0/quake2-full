@@ -1530,6 +1530,8 @@ void CL_InitLocal (void)
 	Cmd_AddCommand("selecttank", NULL);
 	Cmd_AddCommand("selectsnipe", NULL);
 	Cmd_AddCommand("selectmedic", NULL);
+	Cmd_AddCommand("levelup", NULL);
+	Cmd_AddCommand("ability", NULL);
 	Cmd_AddCommand ("kill", NULL);
 	Cmd_AddCommand ("use", NULL);
 	Cmd_AddCommand ("drop", NULL);

@@ -829,7 +829,41 @@ void Blaster_Fire (edict_t *ent, vec3_t g_offset, int damage, qboolean hyper, in
 	VectorScale (forward, -2, ent->client->kick_origin);
 	ent->client->kick_angles[0] = -1;
 
-	fire_blaster (ent, start, forward, damage, 1000, effect, hyper);
+	if (ent->client->pers.selected_class != CLASS_MEDIC && ent->client->pers.level > 2)
+	{
+		fire_blaster(ent, start, forward, damage, 1000, effect, hyper);
+	}
+	else
+	{
+		fire_blaster(ent, start, forward, damage, 1000, effect, hyper);
+
+		vec3_t modStart;
+		VectorCopy(start, modStart);
+		float dist = 20;
+		modStart[0] += dist;
+		fire_blaster(ent, modStart, forward, damage * 0.75, 1000, effect, hyper);
+
+		VectorCopy(start, modStart);
+		modStart[0] -= dist;
+		fire_blaster(ent, modStart, forward, damage * 0.75, 1000, effect, hyper);
+
+		VectorCopy(start, modStart);
+		modStart[1] += dist;
+		fire_blaster(ent, modStart, forward, damage * 0.75, 1000, effect, hyper);
+
+		VectorCopy(start, modStart);
+		modStart[1] -= dist;
+		fire_blaster(ent, modStart, forward, damage * 0.75, 1000, effect, hyper);
+
+		VectorCopy(start, modStart);
+		modStart[2] += dist;
+		fire_blaster(ent, modStart, forward, damage * 0.75, 1000, effect, hyper);
+
+		VectorCopy(start, modStart);
+		modStart[2] -= dist;
+		fire_blaster(ent, modStart, forward, damage * 0.75, 1000, effect, hyper);
+
+	}
 
 	// send muzzle flash
 	gi.WriteByte (svc_muzzleflash);
