@@ -1,24 +1,7 @@
 ﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(517,5): warning MSB8004: Output Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Output Directory.
-  p_client.c
-C:\Users\ogore\IT266Quake2\quake2-full\game\p_client.c(70,42): warning C4100: 'self': unreferenced formal parameter
-C:\Users\ogore\IT266Quake2\quake2-full\game\p_client.c(179,66): warning C4100: 'damage': unreferenced formal parameter
-C:\Users\ogore\IT266Quake2\quake2-full\game\p_client.c(179,56): warning C4100: 'kick': unreferenced formal parameter
-C:\Users\ogore\IT266Quake2\quake2-full\game\p_client.c(179,43): warning C4100: 'other': unreferenced formal parameter
-C:\Users\ogore\IT266Quake2\quake2-full\game\p_client.c(179,28): warning C4100: 'self': unreferenced formal parameter
-C:\Users\ogore\IT266Quake2\quake2-full\game\p_client.c(211,46): warning C4100: 'inflictor': unreferenced formal parameter
-C:\Users\ogore\IT266Quake2\quake2-full\game\p_client.c(501,91): warning C4100: 'point': unreferenced formal parameter
-C:\Users\ogore\IT266Quake2\quake2-full\game\p_client.c(615,6): warning C4459: declaration of 'level' hides global declaration
-      C:\Users\ogore\IT266Quake2\quake2-full\game\g_local.h(462,23):
-      see declaration of 'level'
-  
-C:\Users\ogore\IT266Quake2\quake2-full\game\p_client.c(997,89): warning C4100: 'point': unreferenced formal parameter
-C:\Users\ogore\IT266Quake2\quake2-full\game\p_client.c(997,60): warning C4100: 'attacker': unreferenced formal parameter
-C:\Users\ogore\IT266Quake2\quake2-full\game\p_client.c(997,40): warning C4100: 'inflictor': unreferenced formal parameter
-C:\Users\ogore\IT266Quake2\quake2-full\game\p_client.c(1436,3): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-C:\Users\ogore\IT266Quake2\quake2-full\game\p_client.c(1441,2): warning C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-C:\Users\ogore\IT266Quake2\quake2-full\game\p_client.c(1481,2): warning C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-C:\Users\ogore\IT266Quake2\quake2-full\game\p_client.c(1813,18): warning C4101: 'info': unreferenced local variable
-C:\Users\ogore\IT266Quake2\quake2-full\game\p_client.c(1828,1): warning C4701: potentially uninitialized local variable 'it' used
-C:\Users\ogore\IT266Quake2\quake2-full\game\p_client.c(1828,1): warning C4703: potentially uninitialized local pointer variable 'it' used
+  g_monster.c
+C:\Users\ogore\IT266Quake2\quake2-full\game\g_monster.c(91,95): warning C4100: 'kick': unreferenced formal parameter
+C:\Users\ogore\IT266Quake2\quake2-full\game\g_monster.c(440,43): warning C4100: 'other': unreferenced formal parameter
+C:\Users\ogore\IT266Quake2\quake2-full\game\g_monster.c(483,59): warning C4100: 'other': unreferenced formal parameter
      Creating library .\..\release\gamex86.lib and object .\..\release\gamex86.exp
   game.vcxproj -> C:\Program Files (x86)\Steam\steamapps\common\Quake 2\mod\gamex86.dll

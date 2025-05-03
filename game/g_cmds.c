@@ -20,6 +20,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "g_local.h"
 #include "m_player.h"
 
+//#include "m_berserk.c"
+
 
 char *ClientTeam (edict_t *ent)
 {
@@ -304,10 +306,33 @@ void Cmd_Give_f (edict_t *ent)
 	}
 }
 
-/*void Cmd_SpawnBeserk_f(edict_t* spawner, edict_t* created)
+void Cmd_SpawnBerserk_f(edict_t* ent)
 {
-	SP_monster_berserk(created;)
-}*/
+	edict_t* created;
+	vec3_t newOrigin;
+	created = G_Spawn();
+	VectorCopy(ent->s.origin, newOrigin);
+	newOrigin[2] += 50;
+	VectorCopy(newOrigin, created->s.origin);
+	VectorCopy(newOrigin, created->s.old_origin);
+	
+	created->classname = "monster_soldier_light";
+
+	//gi.linkentity(created);
+	ED_CallSpawn(created);
+	/*
+	vec3_t newOrigin;
+	created = gi.TagMalloc(sizeof(g_edicts[0]), TAG_GAME);
+	SP_monster_berserk(created);
+	VectorCopy(ent->s.origin, newOrigin);
+	newOrigin[2] += 50;
+	VectorCopy(newOrigin, created->s.origin);
+
+	gi.cprintf(ent, PRINT_HIGH, "created an ent at %f,%f,%f\n your origin is %f,%f,%f",
+		created->s.origin[0], created->s.origin[1], created->s.origin[2],
+		ent->s.origin[0], ent->s.origin[1], ent->s.origin[2]);
+		*/
+}
 
 /*
 ==================
@@ -1175,6 +1200,8 @@ void ClientCommand (edict_t *ent)
 		Cmd_Give_f(ent);
 	else if (Q_stricmp(cmd, "god") == 0)
 		Cmd_God_f(ent);
+	else if (Q_stricmp(cmd, "spawn") == 0)
+		Cmd_SpawnBerserk_f(ent);
 	else if (Q_stricmp(cmd, "notarget") == 0)
 		Cmd_Notarget_f(ent);
 	else if (Q_stricmp(cmd, "noclip") == 0)

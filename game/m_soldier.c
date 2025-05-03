@@ -1237,12 +1237,6 @@ void SP_monster_soldier_x (edict_t *self)
 */
 void SP_monster_soldier_light (edict_t *self)
 {
-	if (deathmatch->value)
-	{
-		G_FreeEdict (self);
-		return;
-	}
-
 	SP_monster_soldier_x (self);
 
 	sound_pain_light = gi.soundindex ("soldier/solpain2.wav");
@@ -1260,11 +1254,6 @@ void SP_monster_soldier_light (edict_t *self)
 */
 void SP_monster_soldier (edict_t *self)
 {
-	if (deathmatch->value)
-	{
-		G_FreeEdict (self);
-		return;
-	}
 
 	SP_monster_soldier_x (self);
 
@@ -1281,11 +1270,7 @@ void SP_monster_soldier (edict_t *self)
 */
 void SP_monster_soldier_ss (edict_t *self)
 {
-	if (deathmatch->value)
-	{
-		G_FreeEdict (self);
-		return;
-	}
+
 
 	SP_monster_soldier_x (self);
 
