@@ -410,6 +410,12 @@ qboolean FindTarget (edict_t *self)
 	qboolean	heardit;
 	int			r;
 
+	/*if (self->enemy->client && self->monsterinfo.hostSpawned && self->enemy->client->pers.selected_class == CLASS_HOST) //*()
+	{
+		self->enemy = NULL;
+		return false;
+	}*/
+
 	if (self->monsterinfo.aiflags & AI_GOOD_GUY)
 	{
 		if (self->goalentity && self->goalentity->inuse && self->goalentity->classname)
@@ -570,7 +576,11 @@ qboolean FindTarget (edict_t *self)
 		self->monsterinfo.aiflags |= AI_SOUND_TARGET;
 		self->enemy = client;
 	}
-
+	if (self->enemy->client && self->monsterinfo.hostSpawned && self->enemy->client->pers.selected_class == CLASS_HOST) //*()
+	{
+		self->enemy = NULL;
+		return false;
+	}
 //
 // got one
 //
@@ -770,6 +780,7 @@ used by ai_run and ai_stand
 */
 qboolean ai_checkattack (edict_t *self, float dist)
 {
+
 	vec3_t		temp;
 	qboolean	hesDeadJim;
 

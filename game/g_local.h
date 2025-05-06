@@ -469,6 +469,8 @@ typedef struct
 
 	int			power_armor_type;
 	int			power_armor_power;
+
+	qboolean	hostSpawned;
 } monsterinfo_t;
 
 
@@ -896,6 +898,10 @@ typedef struct
 	float abilityTime;
 	float ogSpeed;
 	qboolean abilityActive;
+	int maxMonsterPts;
+	int monsterPts;
+	int monstersKilled;
+	int requiredKills;
 } client_persistant_t;
 
 // client data that stays across deathmatch respawns

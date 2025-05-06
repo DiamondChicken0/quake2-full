@@ -645,6 +645,8 @@ void InitClientPersistant (gclient_t *client)
 		client->pers.max_health = 150;
 		client->pers.max_shells = 200;
 		client->pers.inventory[ITEM_INDEX(FindItem("shells"))] = 200;
+		client->pers.monstersKilled = 0;
+		client->pers.requiredKills = 15;
 		break;
 	case CLASS_TACT:
 		item = FindItem("machinegun");
@@ -652,6 +654,8 @@ void InitClientPersistant (gclient_t *client)
 		client->pers.max_health = 100;
 		client->pers.max_bullets = 600;
 		client->pers.inventory[ITEM_INDEX(FindItem("bullets"))] = 600;
+		client->pers.monstersKilled = 0;
+		client->pers.requiredKills = 15;
 		break;
 	case CLASS_TANK:
 		item = FindItem("chaingun");
@@ -659,6 +663,8 @@ void InitClientPersistant (gclient_t *client)
 		client->pers.max_health = 200;
 		client->pers.max_bullets = 1000;
 		client->pers.inventory[ITEM_INDEX(FindItem("bullets"))] = 1000;
+		client->pers.monstersKilled = 0;
+		client->pers.requiredKills = 15;
 		break;
 	case CLASS_SNIPE:
 		item = FindItem("railgun");
@@ -666,11 +672,22 @@ void InitClientPersistant (gclient_t *client)
 		client->pers.max_health = 75;
 		client->pers.max_slugs = 200;
 		client->pers.inventory[ITEM_INDEX(FindItem("slugs"))] = 200;
+		client->pers.monstersKilled = 0;
+		client->pers.requiredKills = 10;
 		break;
 	case CLASS_MEDIC:
 		item = FindItem("blaster");
 		client->pers.health = 75;
 		client->pers.max_health = 75;
+		client->pers.monstersKilled = 0;
+		client->pers.requiredKills = 8;
+		break;
+	case CLASS_HOST:
+		item = FindItem("blaster");
+		client->pers.health = 999;
+		client->pers.max_health = 999;
+		client->pers.maxMonsterPts = 100;
+		client->pers.monsterPts = 100;
 		break;
 	default:
 		item = FindItem("blaster");

@@ -101,6 +101,28 @@ void Killed (edict_t *targ, edict_t *inflictor, edict_t *attacker, int damage, v
 //		targ->svflags |= SVF_DEADMONSTER;	// now treat as a different content type
 		if (!(targ->monsterinfo.aiflags & AI_GOOD_GUY))
 		{
+			if (inflictor->client && inflictor->client->pers.selected_class >= CLASS_WAR && inflictor->client->pers.selected_class <= CLASS_MEDIC) //*()
+			{
+				inflictor->client->pers.monstersKilled++;
+				if (inflictor->client->pers.monstersKilled % inflictor->client->pers.requiredKills == 0)
+				{
+					if (inflictor->client->pers.level < 3)
+						inflictor->client->pers.level++;
+
+					gi.cprintf(inflictor, PRINT_HIGH, "Your level is now %i\n", inflictor->client->pers.level);
+				}
+			}
+			if (inflictor->client && inflictor->client->pers.selected_class >= CLASS_WAR && inflictor->client->pers.selected_class <= CLASS_MEDIC) //*()
+			{
+				inflictor->client->pers.monstersKilled++;
+				if (inflictor->client->pers.monstersKilled % inflictor->client->pers.requiredKills == 0)
+				{
+					if (inflictor->client->pers.level < 3)
+						inflictor->client->pers.level++;
+
+					gi.cprintf(inflictor, PRINT_HIGH, "Your level is now %i\n", inflictor->client->pers.level);
+				}
+			} // IMPLEMENT SNIPER EXPLOSIVE DEATH UPGRADE //*()
 			level.killed_monsters++;
 			if (coop->value && attacker->client)
 				attacker->client->resp.score++;
@@ -294,6 +316,10 @@ static int CheckArmor (edict_t *ent, vec3_t point, vec3_t normal, int damage, in
 
 void M_ReactToDamage (edict_t *targ, edict_t *attacker)
 {
+	if (attacker->client && targ->monsterinfo.hostSpawned && attacker->client->pers.selected_class == CLASS_HOST) //*()
+	{
+		return;
+	}
 	if (!(attacker->client) && !(attacker->svflags & SVF_MONSTER))
 		return;
 
@@ -385,6 +411,12 @@ void T_Damage (edict_t *targ, edict_t *inflictor, edict_t *attacker, vec3_t dir,
 
 	if (!targ->takedamage)
 		return;
+
+	if (attacker->client && attacker->client->pers.selected_class == CLASS_SNIPE && attacker->client->pers.abilityActive)
+	{
+		damage *= 4;
+		attacker->client->pers.abilityActive = false;
+	}
 
 	// friendly fire avoidance
 	// if enabled you can't hurt teammates (but you can hurt yourself)

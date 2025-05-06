@@ -804,7 +804,65 @@ void Weapon_RocketLauncher (edict_t *ent)
 	Weapon_Generic (ent, 4, 12, 50, 54, pause_frames, fire_frames, Weapon_RocketLauncher_Fire);
 }
 
-
+qboolean monsterCost(edict_t* ent, int monster)
+{
+	switch (monster)
+	{
+	case LIGHT_GUARD:
+		if (ent->client->pers.monsterPts - 1 < 0)
+			return false;
+		ent->client->pers.monsterPts -= 1;
+		break;
+	case SHOTGUN_GUARD:
+		if (ent->client->pers.monsterPts - 2 < 0)
+			return false;
+		ent->client->pers.monsterPts -= 2;
+		break;
+	case MACHINE_GUARD:
+		if (ent->client->pers.monsterPts - 2 < 0)
+			return false;	
+		ent->client->pers.monsterPts -= 2;
+		break;
+	case FLYER:
+		if (ent->client->pers.monsterPts - 2 < 0)
+			return false;
+		ent->client->pers.monsterPts -= 2;
+		break;
+	case ENFORCER:
+		if (ent->client->pers.monsterPts - 3 < 0)
+			return false;
+		ent->client->pers.monsterPts -= 3;
+		break;
+	case PARASITE:
+		if (ent->client->pers.monsterPts - 3 < 0)
+			return false;
+		ent->client->pers.monsterPts -= 3;
+		break;
+	case GUNNER:
+		if (ent->client->pers.monsterPts - 3 < 0)
+			return false;
+		ent->client->pers.monsterPts -= 3;
+		break;
+	case BRAINS:
+		if (ent->client->pers.monsterPts - 4 < 0)
+			return false;
+		ent->client->pers.monsterPts -= 4;
+		break;
+	case IRON_MAIDEN:
+		if (ent->client->pers.monsterPts - 5 < 0)
+			return false;
+		ent->client->pers.monsterPts -= 5;
+		break;
+	case GLADIATOR:
+		if (ent->client->pers.monsterPts - 6 < 0)
+			return false;
+		ent->client->pers.monsterPts -= 6;
+		break;
+	default:
+		gi.cprintf(ent, PRINT_HIGH, "You fucked up");
+	}
+	return true;
+}
 /*
 ======================================================================
 
@@ -862,7 +920,7 @@ void Blaster_Fire (edict_t *ent, vec3_t g_offset, int damage, qboolean hyper, in
 	}
 	else
 	{
-		fire_blaster(ent, start, forward, 0, 4000, effect, hyper);
+		fire_blaster(ent, start, forward, 0, 1000, effect, hyper);
 		trace_t trace;
 		vec3_t end;
 		VectorMA(start, 8192, forward, end);
@@ -872,7 +930,7 @@ void Blaster_Fire (edict_t *ent, vec3_t g_offset, int damage, qboolean hyper, in
 		{
 			edict_t* created;
 			created = G_Spawn();
-			trace.endpos[2] += 75;
+			trace.endpos[2] += 50;
 			VectorCopy(trace.endpos, created->s.origin);
 			VectorCopy(trace.endpos, created->s.old_origin);
 
@@ -909,6 +967,17 @@ void Blaster_Fire (edict_t *ent, vec3_t g_offset, int damage, qboolean hyper, in
 				created->classname = "monster_gladiator";
 				break;
 			}
+			if (!monsterCost(ent, ent->client->pers.selected_monster))
+			{
+				gi.centerprintf(ent, "Out of points\n%i/%i", ent->client->pers.monsterPts, ent->client->pers.maxMonsterPts);
+				created->think = G_FreeEdict;
+				created->nextthink = 0;
+			}
+			else
+			{
+				gi.centerprintf(ent, "Remaining points\n%i/%i", ent->client->pers.monsterPts, ent->client->pers.maxMonsterPts);
+			}
+			created->monsterinfo.hostSpawned = true;
 			ED_CallSpawn(created);
 		}
 	}

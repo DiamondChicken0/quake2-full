@@ -1121,12 +1121,14 @@ void Cmd_UseAbility(edict_t* ent)
 			info = (gitem_armor_t*)it->info;
 			ent->client->pers.inventory[ITEM_INDEX(it)] =
 				ent->client->pers.inventory[ITEM_INDEX(it)] + 40 > info->max_count ? info->max_count : ent->client->pers.inventory[ITEM_INDEX(it)] + 40;
+			ent->client->pers.inventory[ITEM_INDEX(FindItem("bullets"))] += 200;
 			break;
 		case 3:
 			it = FindItem("Body Armor");
 			info = (gitem_armor_t*)it->info;
 			ent->client->pers.inventory[ITEM_INDEX(it)] =
 				ent->client->pers.inventory[ITEM_INDEX(it)] + 40 > info->max_count ? info->max_count : ent->client->pers.inventory[ITEM_INDEX(it)] + 40;
+			ent->client->pers.inventory[ITEM_INDEX(FindItem("bullets"))] += 200;
 			break;
 		default:
 			gi.cprintf(ent, PRINT_HIGH, "Invalid Level %i, please check for errors", ent->client->pers.level);
