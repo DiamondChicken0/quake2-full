@@ -106,6 +106,20 @@ typedef enum
 	AMMO_SLUGS
 } ammo_t;
 
+typedef enum
+{
+	LIGHT_GUARD,
+	SHOTGUN_GUARD,
+	MACHINE_GUARD,
+	FLYER,
+	ENFORCER,
+	PARASITE,
+	GUNNER,
+	BRAINS,
+	IRON_MAIDEN,
+	GLADIATOR
+} monster;
+
 typedef enum //*()
 {
 	NOTHING,
@@ -113,7 +127,8 @@ typedef enum //*()
 	CLASS_TACT,
 	CLASS_TANK,
 	CLASS_SNIPE,
-	CLASS_MEDIC
+	CLASS_MEDIC,
+	CLASS_HOST
 } player_type;
 
 //deadflag
@@ -874,6 +889,7 @@ typedef struct
 	qboolean	spectator;			// client is a spectator
 
 	//mod //*()
+	monster selected_monster;
 	player_type selected_class;
 	player_type queued_class_change;
 	int level;

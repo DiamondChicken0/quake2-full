@@ -625,11 +625,7 @@ void chick_sight(edict_t *self, edict_t *other)
 */
 void SP_monster_chick (edict_t *self)
 {
-	if (deathmatch->value)
-	{
-		G_FreeEdict (self);
-		return;
-	}
+	
 
 	sound_missile_prelaunch	= gi.soundindex ("chick/chkatck1.wav");	
 	sound_missile_launch	= gi.soundindex ("chick/chkatck2.wav");	

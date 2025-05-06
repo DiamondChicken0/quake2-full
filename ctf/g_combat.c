@@ -95,7 +95,7 @@ void Killed (edict_t *targ, edict_t *inflictor, edict_t *attacker, int damage, v
 		targ->health = -999;
 
 	targ->enemy = attacker;
-	inflictor.
+
 	if ((targ->svflags & SVF_MONSTER) && (targ->deadflag != DEAD_DEAD))
 	{
 //		targ->svflags |= SVF_DEADMONSTER;	// now treat as a different content type

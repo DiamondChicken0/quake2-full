@@ -828,42 +828,91 @@ void Blaster_Fire (edict_t *ent, vec3_t g_offset, int damage, qboolean hyper, in
 
 	VectorScale (forward, -2, ent->client->kick_origin);
 	ent->client->kick_angles[0] = -1;
-
-	if (ent->client->pers.selected_class != CLASS_MEDIC && ent->client->pers.level > 2)
+	if (ent->client->pers.selected_class != CLASS_HOST)
 	{
 		fire_blaster(ent, start, forward, damage, 1000, effect, hyper);
+		if (ent->client->pers.selected_class == CLASS_MEDIC && ent->client->pers.level > 1)
+		{
+			vec3_t modStart;
+			VectorCopy(start, modStart);
+			float dist = 20;
+			modStart[0] += dist;
+			fire_blaster(ent, modStart, forward, damage * 0.75, 1000, effect, hyper);
+
+			VectorCopy(start, modStart);
+			modStart[0] -= dist;
+			fire_blaster(ent, modStart, forward, damage * 0.75, 1000, effect, hyper);
+
+			VectorCopy(start, modStart);
+			modStart[1] += dist;
+			fire_blaster(ent, modStart, forward, damage * 0.75, 1000, effect, hyper);
+
+			VectorCopy(start, modStart);
+			modStart[1] -= dist;
+			fire_blaster(ent, modStart, forward, damage * 0.75, 1000, effect, hyper);
+
+			VectorCopy(start, modStart);
+			modStart[2] += dist;
+			fire_blaster(ent, modStart, forward, damage * 0.75, 1000, effect, hyper);
+
+			VectorCopy(start, modStart);
+			modStart[2] -= dist;
+			fire_blaster(ent, modStart, forward, damage * 0.75, 1000, effect, hyper);
+		}
 	}
 	else
 	{
-		fire_blaster(ent, start, forward, damage, 1000, effect, hyper);
+		fire_blaster(ent, start, forward, 0, 4000, effect, hyper);
+		trace_t trace;
+		vec3_t end;
+		VectorMA(start, 8192, forward, end);
+		trace = gi.trace(start, vec3_origin, vec3_origin, end, ent, MASK_MONSTERSOLID);
 
-		vec3_t modStart;
-		VectorCopy(start, modStart);
-		float dist = 20;
-		modStart[0] += dist;
-		fire_blaster(ent, modStart, forward, damage * 0.75, 1000, effect, hyper);
+		if (trace.fraction < 1)
+		{
+			edict_t* created;
+			created = G_Spawn();
+			trace.endpos[2] += 75;
+			VectorCopy(trace.endpos, created->s.origin);
+			VectorCopy(trace.endpos, created->s.old_origin);
 
-		VectorCopy(start, modStart);
-		modStart[0] -= dist;
-		fire_blaster(ent, modStart, forward, damage * 0.75, 1000, effect, hyper);
-
-		VectorCopy(start, modStart);
-		modStart[1] += dist;
-		fire_blaster(ent, modStart, forward, damage * 0.75, 1000, effect, hyper);
-
-		VectorCopy(start, modStart);
-		modStart[1] -= dist;
-		fire_blaster(ent, modStart, forward, damage * 0.75, 1000, effect, hyper);
-
-		VectorCopy(start, modStart);
-		modStart[2] += dist;
-		fire_blaster(ent, modStart, forward, damage * 0.75, 1000, effect, hyper);
-
-		VectorCopy(start, modStart);
-		modStart[2] -= dist;
-		fire_blaster(ent, modStart, forward, damage * 0.75, 1000, effect, hyper);
-
+			switch (ent->client->pers.selected_monster)
+			{
+			case LIGHT_GUARD:
+				created->classname = "monster_soldier_light";
+				break;
+			case SHOTGUN_GUARD:
+				created->classname = "monster_soldier";
+				break;
+			case MACHINE_GUARD:
+				created->classname = "monster_soldier_ss";
+				break;
+			case FLYER:
+				created->classname = "monster_flyer";
+				break;
+			case ENFORCER:
+				created->classname = "monster_infantry";
+				break;
+			case PARASITE:
+				created->classname = "monster_parasite";
+				break;
+			case GUNNER:
+				created->classname = "monster_gunner";
+				break;
+			case BRAINS:
+				created->classname = "monster_brain";
+				break;
+			case IRON_MAIDEN:
+				created->classname = "monster_chick";
+				break;
+			case GLADIATOR:
+				created->classname = "monster_gladiator";
+				break;
+			}
+			ED_CallSpawn(created);
+		}
 	}
+
 
 	// send muzzle flash
 	gi.WriteByte (svc_muzzleflash);

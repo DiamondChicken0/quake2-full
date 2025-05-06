@@ -317,9 +317,9 @@ void Cmd_SpawnBerserk_f(edict_t* ent)
 	VectorCopy(newOrigin, created->s.old_origin);
 	
 	created->classname = "monster_soldier_light";
-
-	//gi.linkentity(created);
 	ED_CallSpawn(created);
+	//gi.linkentity(created);
+	
 	/*
 	vec3_t newOrigin;
 	created = gi.TagMalloc(sizeof(g_edicts[0]), TAG_GAME);
@@ -937,12 +937,72 @@ void Cmd_PlayerList_f(edict_t *ent)
 	gi.cprintf(ent, PRINT_HIGH, "%s", text);
 }
 
+void printMonster(edict_t* ent)
+{
+	switch (ent->client->pers.selected_monster)
+	{
+	case LIGHT_GUARD:
+		gi.cprintf(ent, PRINT_HIGH, "Selected Light Guard\n");
+		break;
+	case SHOTGUN_GUARD:
+		gi.cprintf(ent, PRINT_HIGH, "Selected Shotgun Guard\n");
+		break;
+	case MACHINE_GUARD:
+		gi.cprintf(ent, PRINT_HIGH, "Selected Machine Gun Guard\n");
+		break;
+	case FLYER:
+		gi.cprintf(ent, PRINT_HIGH, "Selected Flyer\n");
+		break;
+	case ENFORCER:
+		gi.cprintf(ent, PRINT_HIGH, "Selected Enforcer\n");
+		break;
+	case PARASITE:
+		gi.cprintf(ent, PRINT_HIGH, "Selected Parasite\n");
+		break;
+	case GUNNER:
+		gi.cprintf(ent, PRINT_HIGH, "Selected Gunner\n");
+		break;
+	case BRAINS:
+		gi.cprintf(ent, PRINT_HIGH, "Selected Brains\n");
+		break;
+	case IRON_MAIDEN:
+		gi.cprintf(ent, PRINT_HIGH, "Selected Iron Maiden\n");
+		break;
+	case GLADIATOR:
+		gi.cprintf(ent, PRINT_HIGH, "Selected Gladiator\n");
+		break;
+	default:
+		gi.cprintf(ent, PRINT_HIGH, "Error in indexing monster\n");
+		break;
+	}
+}
+
+void Cmd_MonsterUp(edict_t* ent)
+{
+	if (ent->client->pers.selected_class != CLASS_HOST)
+		return;
+
+	ent->client->pers.selected_monster++;
+	ent->client->pers.selected_monster %= 10;
+	printMonster(ent);
+}
+void Cmd_MonsterDown(edict_t* ent)
+{
+	if (ent->client->pers.selected_class != CLASS_HOST)
+		return;
+
+	ent->client->pers.selected_monster--;
+	if (ent->client->pers.selected_monster == -1)
+		ent->client->pers.selected_monster = GLADIATOR;
+	ent->client->pers.selected_monster %= 10;
+	printMonster(ent);
+}
+
 void Cmd_SelectWar(edict_t* ent)
 {
 	ent->client->pers.queued_class_change = CLASS_WAR;
 	gi.cprintf(ent, PRINT_HIGH, "You will spawn in as the Warrior Class on death");
 }
-
 void Cmd_SelectTact(edict_t* ent)
 {
 	ent->client->pers.queued_class_change = CLASS_TACT;
@@ -963,6 +1023,11 @@ void Cmd_SelectMedic(edict_t* ent)
 	ent->client->pers.queued_class_change = CLASS_MEDIC;
 	gi.cprintf(ent, PRINT_HIGH, "You will spawn in as the Medic Class on death");
 }
+void Cmd_SelectHost(edict_t* ent)
+{
+	ent->client->pers.queued_class_change = CLASS_HOST;
+	gi.cprintf(ent, PRINT_HIGH, "You will spawn in as a Host on death");
+}
 void Cmd_UseAbility(edict_t* ent)
 {
 	vec3_t	forward, right, up;
@@ -975,6 +1040,8 @@ void Cmd_UseAbility(edict_t* ent)
 	gitem_t* it;
 
 	vec3_t dist;
+
+	edict_t* other;
 
 	ent->client->pers.abilityActive = true;
 	switch (ent->client->pers.selected_class)
@@ -1099,43 +1166,84 @@ void Cmd_UseAbility(edict_t* ent)
 		ent->client->pers.abilityTime = level.time;
 		break;
 	case CLASS_MEDIC:
+		if (ent->client->pers.abilityTime + 20  > level.time)
+			break;
+		//gi.cprintf(ent, PRINT_HIGH, "There are %i clients to check\n", maxclients->value);
 		switch (ent->client->pers.level)
 		{
 		case 1:
-			for (int i = 0; i < maxclients->value; i++)
+			for (int i = 0; i <= game.maxclients; i++)
 			{
+				other = &g_edicts[i];
+				if (!other->inuse || !other->client)
+					continue;
+				//gi.cprintf(ent, PRINT_HIGH, "Checking %s\n", other->client->pers.netname);
+				if (other->client->pers.connected && other->client->pers.selected_class >= CLASS_WAR && other->client->pers.selected_class <= CLASS_MEDIC)
+				{
+					VectorSubtract(other->client->ps.pmove.origin, ent->client->ps.pmove.origin, dist);
+					
+					if (VectorLength(dist) < 1024)
+					{
+						if (other->health >= other->max_health) // if the player is overhealed dont overwrite it
+							continue;
+						gi.cprintf(ent, PRINT_HIGH, "%s has been healed\n", other->client->pers.netname);
+						other->health = other->health + 50 > other->client->pers.max_health ? other->client->pers.max_health : other->health + 50;
+					}
+				}
+			}
+			/*for (int i = 0; i < maxentities->value; i++)
+			{
+				gi.cprintf(ent, PRINT_HIGH, "Checking %s\n", game.en);
+				//gi.cprintf(ent, PRINT_HIGH, "Checking %s\n", game.clients[i].pers.netname);
 				if (game.clients[i].pers.connected && game.clients[i].pers.selected_class >= CLASS_WAR && game.clients[i].pers.selected_class <= CLASS_MEDIC)
 				{
 					VectorSubtract(game.clients[i].ps.pmove.origin, ent->client->ps.pmove.origin, dist);
-					if (VectorLength(dist) < 256)
+					gi.cprintf(ent, PRINT_HIGH, "%s Passed and is %f units away\n", game.clients[i].pers.netname, VectorLength(dist));
+					if (VectorLength(dist) < 1024)
 					{
 						game.clients[i].pers.health = game.clients[i].pers.health + 50 > game.clients[i].pers.max_health ? game.clients[i].pers.max_health : game.clients[i].pers.health + 50;
 					}
 				}
-			}
+			}*/
 			break;
 		case 2:
-			for (int i = 0; i < maxclients->value; i++)
+			for (int i = 0; i <= game.maxclients; i++)
 			{
-				if (game.clients[i].pers.connected && game.clients[i].pers.selected_class >= CLASS_WAR && game.clients[i].pers.selected_class <= CLASS_MEDIC)
+				other = &g_edicts[i];
+				if (!other->inuse || !other->client)
+					continue;
+				//gi.cprintf(ent, PRINT_HIGH, "Checking %s\n", other->client->pers.netname);
+				if (other->client->pers.connected && other->client->pers.selected_class >= CLASS_WAR && other->client->pers.selected_class <= CLASS_MEDIC)
 				{
-					VectorSubtract(game.clients[i].ps.pmove.origin, ent->client->ps.pmove.origin, dist);
-					if (VectorLength(dist) < 256)
+					VectorSubtract(other->client->ps.pmove.origin, ent->client->ps.pmove.origin, dist);
+
+					if (VectorLength(dist) < 1024)
 					{
-						game.clients[i].pers.health = game.clients[i].pers.health + 50 > game.clients[i].pers.max_health ? game.clients[i].pers.max_health : game.clients[i].pers.health + 50;
+						if (other->health >= other->max_health) // if the player is overhealed dont overwrite it
+							continue;
+						gi.cprintf(ent, PRINT_HIGH, "%s has been healed\n", other->client->pers.netname);
+						other->health = other->health + 50 > other->client->pers.max_health ? other->client->pers.max_health : other->health + 50;
 					}
 				}
 			}
 			break;
 		case 3:
-			for (int i = 0; i < maxclients->value; i++)
+			for (int i = 0; i <= game.maxclients; i++)
 			{
-				if (game.clients[i].pers.connected && game.clients[i].pers.selected_class >= CLASS_WAR && game.clients[i].pers.selected_class <= CLASS_MEDIC)
+				other = &g_edicts[i];
+				if (!other->inuse || !other->client)
+					continue;
+				//gi.cprintf(ent, PRINT_HIGH, "Checking %s\n", other->client->pers.netname);
+				if (other->client->pers.connected && other->client->pers.selected_class >= CLASS_WAR && other->client->pers.selected_class <= CLASS_MEDIC)
 				{
-					VectorSubtract(game.clients[i].ps.pmove.origin, ent->client->ps.pmove.origin, dist);
-					if (VectorLength(dist) < 256)
+					VectorSubtract(other->client->ps.pmove.origin, ent->client->ps.pmove.origin, dist);
+
+					if (VectorLength(dist) < 1024)
 					{
-						game.clients[i].pers.health = game.clients[i].pers.health + 50 > game.clients[i].pers.max_health ? game.clients[i].pers.max_health : game.clients[i].pers.health + 50;
+						if (other->health >= other->max_health) // if the player is overhealed dont overwrite it
+							continue;
+						gi.cprintf(ent, PRINT_HIGH, "%s has been healed\n", other->client->pers.netname);
+						other->health = other->health + 50 > other->client->pers.max_health ? other->client->pers.max_health : other->health + 50;
 					}
 				}
 			}
@@ -1144,9 +1252,9 @@ void Cmd_UseAbility(edict_t* ent)
 			gi.cprintf(ent, PRINT_HIGH, "Invalid Level %i, please check for errors", ent->client->pers.level);
 			break;
 		}
-		ent->client->pers.abilityTime = level.time;
-		break;
 	}
+	ent->client->pers.abilityTime = level.time;
+	
 }
 
 /*
@@ -1248,10 +1356,16 @@ void ClientCommand (edict_t *ent)
 		Cmd_SelectSnipe(ent);
 	else if (Q_stricmp(cmd, "selectmedic") == 0)
 		Cmd_SelectMedic(ent);
+	else if (Q_stricmp(cmd, "selecthost") == 0)
+		Cmd_SelectHost(ent);
 	else if (Q_stricmp(cmd, "ability") == 0)
 		Cmd_UseAbility(ent);
 	else if (Q_stricmp(cmd, "levelup") == 0)
 		Cmd_LevelUp(ent);
+	else if (Q_stricmp(cmd, "monsterup") == 0)
+		Cmd_MonsterUp(ent);
+	else if (Q_stricmp(cmd, "monsterdown") == 0)
+		Cmd_MonsterDown(ent);
 	else	// anything that doesn't match a command will be a chat
 		Cmd_Say_f (ent, false, true);
 }
