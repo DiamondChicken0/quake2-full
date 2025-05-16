@@ -101,15 +101,16 @@ void Killed (edict_t *targ, edict_t *inflictor, edict_t *attacker, int damage, v
 //		targ->svflags |= SVF_DEADMONSTER;	// now treat as a different content type
 		if (!(targ->monsterinfo.aiflags & AI_GOOD_GUY))
 		{
-			if (inflictor->client && inflictor->client->pers.selected_class >= CLASS_WAR && inflictor->client->pers.selected_class <= CLASS_MEDIC) //*()
+			if (attacker->client && attacker->client->pers.selected_class >= CLASS_WAR && attacker->client->pers.selected_class <= CLASS_MEDIC) //*()
 			{
-				inflictor->client->pers.monstersKilled++;
-				if (inflictor->client->pers.monstersKilled % inflictor->client->pers.requiredKills == 0)
+				attacker->client->pers.monstersKilled++;
+				if (attacker->client->pers.monstersKilled % attacker->client->pers.requiredKills == 0)
 				{
-					if (inflictor->client->pers.level < 3)
-						inflictor->client->pers.level++;
+					if (attacker->client->pers.level < 3)
+						attacker->client->pers.level++;
 
-					gi.cprintf(inflictor, PRINT_HIGH, "Your level is now %i\n", inflictor->client->pers.level);
+					gi.cprintf(attacker, PRINT_HIGH, "Your level is now %i\n", attacker->client->pers.level);
+
 				}
 			}
 			if (inflictor->client && inflictor->client->pers.selected_class >= CLASS_WAR && inflictor->client->pers.selected_class <= CLASS_MEDIC) //*()
