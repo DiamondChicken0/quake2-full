@@ -1,8 +1,25 @@
 ﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(517,5): warning MSB8004: Output Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Output Directory.
-  g_combat.c
-C:\Users\ogore\IT266Quake2\quake2-full\game\g_combat.c(385,51): warning C4100: 'attacker': unreferenced formal parameter
-C:\Users\ogore\IT266Quake2\quake2-full\game\g_combat.c(385,36): warning C4100: 'targ': unreferenced formal parameter
-C:\Users\ogore\IT266Quake2\quake2-full\game\g_combat.c(260,1): warning C4701: potentially uninitialized local variable 'index' used
-C:\Users\ogore\IT266Quake2\quake2-full\game\g_combat.c(220,1): warning C4701: potentially uninitialized local variable 'power' used
+  g_cmds.c
+C:\Users\ogore\IT266Quake2\quake2-full\game\g_cmds.c(36,2): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\ogore\IT266Quake2\quake2-full\game\g_cmds.c(59,2): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\ogore\IT266Quake2\quake2-full\game\g_cmds.c(60,2): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\ogore\IT266Quake2\quake2-full\game\g_cmds.c(147,1): warning C4431: missing type specifier - int assumed. Note: C no longer supports default-int
+C:\Users\ogore\IT266Quake2\quake2-full\game\g_cmds.c(320,2): warning C4013: 'ED_CallSpawn' undefined; assuming extern returning int
+C:\Users\ogore\IT266Quake2\quake2-full\game\g_cmds.c(760,4): warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\ogore\IT266Quake2\quake2-full\game\g_cmds.c(763,3): warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\ogore\IT266Quake2\quake2-full\game\g_cmds.c(846,3): warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\ogore\IT266Quake2\quake2-full\game\g_cmds.c(847,3): warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\ogore\IT266Quake2\quake2-full\game\g_cmds.c(848,3): warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\ogore\IT266Quake2\quake2-full\game\g_cmds.c(859,3): warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\ogore\IT266Quake2\quake2-full\game\g_cmds.c(866,2): warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\ogore\IT266Quake2\quake2-full\game\g_cmds.c(913,7): warning C4459: declaration of 'st' hides global declaration
+      C:\Users\ogore\IT266Quake2\quake2-full\game\g_local.h(482,21):
+      see declaration of 'st'
+  
+C:\Users\ogore\IT266Quake2\quake2-full\game\g_cmds.c(935,3): warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\ogore\IT266Quake2\quake2-full\game\g_cmds.c(923,3): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\ogore\IT266Quake2\quake2-full\game\g_cmds.c(931,4): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\ogore\IT266Quake2\quake2-full\game\g_cmds.c(1035,9): warning C4101: 'offset': unreferenced local variable
+C:\Users\ogore\IT266Quake2\quake2-full\game\g_cmds.c(1034,9): warning C4101: 'start': unreferenced local variable
      Creating library .\..\release\gamex86.lib and object .\..\release\gamex86.exp
   game.vcxproj -> C:\Program Files (x86)\Steam\steamapps\common\Quake 2\mod\gamex86.dll

@@ -1845,6 +1845,7 @@ void ClientThink (edict_t *ent, usercmd_t *ucmd)
 		if (it)
 			ent->client->pers.inventory[ITEM_INDEX(it)] =
 				ent->client->pers.inventory[ITEM_INDEX(it)] - 40 > 0 ? ent->client->pers.inventory[ITEM_INDEX(it)] - 40 : 0;
+
 	}
 }
 

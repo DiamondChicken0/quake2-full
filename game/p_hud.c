@@ -163,6 +163,7 @@ DeathmatchScoreboardMessage
 */
 void DeathmatchScoreboardMessage (edict_t *ent, edict_t *killer)
 {
+	/*
 	char	entry[1024];
 	char	string[1400];
 	int		stringlength;
@@ -245,9 +246,47 @@ void DeathmatchScoreboardMessage (edict_t *ent, edict_t *killer)
 		strcpy (string + stringlength, entry);
 		stringlength += j;
 	}
+	*/
 
-	gi.WriteByte (svc_layout);
-	gi.WriteString (string);
+	char	string[1024];
+	/*char* sk;
+
+	if (skill->value == 0)
+		sk = "easy";
+	else if (skill->value == 1)
+		sk = "medium";
+	else if (skill->value == 2)
+		sk = "hard";
+	else
+		sk = "hard+";
+
+	// send the layout
+	Com_sprintf (string, sizeof(string),
+		"xv 32 yv 8 picn help "			// background
+		"xv 202 yv 12 string2 \"%s\" "		// skill
+		"xv 0 yv 24 cstring2 \"%s\" "		// level name
+		"xv 0 yv 54 cstring2 \"%s\" "		// help 1
+		"xv 0 yv 110 cstring2 \"%s\" "		// help 2
+		"xv 50 yv 164 string2 \" kills     goals    secrets\" "
+		"xv 50 yv 172 string2 \"%3i/%3i     %i/%i       %i/%i\" ",
+		sk,
+		level.level_name,
+		game.helpmessage1,
+		game.helpmessage2,
+		level.killed_monsters, level.total_monsters,
+		level.found_goals, level.total_goals,
+		level.found_secrets, level.total_secrets);
+	*/
+	 
+	if (ent->client->pers.selected_class == CLASS_HOST)
+		Com_sprintf(string, sizeof(string),
+		"xv -75 yv 0 picn host ");
+	else
+		Com_sprintf(string, sizeof(string),
+			"xv -75 yv 0 picn player ");
+	gi.WriteByte(svc_layout);
+	gi.WriteString(string);
+	gi.unicast(ent, true);
 }
 
 
@@ -299,10 +338,11 @@ HelpComputer
 Draw help computer.
 ==================
 */
-void HelpComputer (edict_t *ent)
+
+void HelpComputer(edict_t* ent)
 {
 	char	string[1024];
-	char	*sk;
+	/*char* sk;
 
 	if (skill->value == 0)
 		sk = "easy";
@@ -321,18 +361,21 @@ void HelpComputer (edict_t *ent)
 		"xv 0 yv 54 cstring2 \"%s\" "		// help 1
 		"xv 0 yv 110 cstring2 \"%s\" "		// help 2
 		"xv 50 yv 164 string2 \" kills     goals    secrets\" "
-		"xv 50 yv 172 string2 \"%3i/%3i     %i/%i       %i/%i\" ", 
+		"xv 50 yv 172 string2 \"%3i/%3i     %i/%i       %i/%i\" ",
 		sk,
 		level.level_name,
 		game.helpmessage1,
 		game.helpmessage2,
-		level.killed_monsters, level.total_monsters, 
+		level.killed_monsters, level.total_monsters,
 		level.found_goals, level.total_goals,
 		level.found_secrets, level.total_secrets);
+	*/
 
-	gi.WriteByte (svc_layout);
-	gi.WriteString (string);
-	gi.unicast (ent, true);
+	Com_sprintf(string, sizeof(string),
+		"xv 32 yv 8 picn player ");
+	gi.WriteByte(svc_layout);
+	gi.WriteString(string);
+	gi.unicast(ent, true);
 }
 
 
@@ -345,7 +388,7 @@ Display the current help message
 */
 void Cmd_Help_f (edict_t *ent)
 {
-	// this is for backwards compatability
+
 	if (deathmatch->value)
 	{
 		Cmd_Score_f (ent);
@@ -506,7 +549,31 @@ void G_SetStats (edict_t *ent)
 	//
 	// frags
 	//
-	ent->client->ps.stats[STAT_FRAGS] = ent->client->resp.score;
+	int time = 0;
+	if (ent->client->pers.selected_class == CLASS_WAR)
+	{
+		time = 12 - level.time + ent->client->pers.abilityTime;
+	}
+	if (ent->client->pers.selected_class == CLASS_TACT)
+	{
+		time = 5 - level.time + ent->client->pers.abilityTime;
+	}
+	if (ent->client->pers.selected_class == CLASS_TANK)
+	{
+		time = 20 - level.time + ent->client->pers.abilityTime;
+	}
+	if (ent->client->pers.selected_class == CLASS_SNIPE)
+	{
+		time = 12 - level.time + ent->client->pers.abilityTime;
+	}
+	if (ent->client->pers.selected_class == CLASS_MEDIC)
+	{
+		time = 20 - level.time + ent->client->pers.abilityTime;
+	}
+
+	if (time < 0)
+		time = 0;
+	ent->client->ps.stats[STAT_FRAGS] = time;
 
 	//
 	// help icon / current weapon if not shown

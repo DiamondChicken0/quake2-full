@@ -168,6 +168,7 @@ DeathmatchScoreboardMessage
 */
 void DeathmatchScoreboardMessage (edict_t *ent, edict_t *killer)
 {
+	/*
 	char	entry[1024];
 	char	string[1400];
 	int		stringlength;
@@ -256,10 +257,14 @@ void DeathmatchScoreboardMessage (edict_t *ent, edict_t *killer)
 			break;
 		strcpy (string + stringlength, entry);
 		stringlength += j;
-	}
+	}*/
 
-	gi.WriteByte (svc_layout);
-	gi.WriteString (string);
+	char	string[1024];
+
+	Com_sprintf(string, sizeof(string),
+		"xv 32 yv 8 picn host ");
+	gi.WriteByte(svc_layout);
+	gi.WriteString(string);
 }
 
 
@@ -320,7 +325,7 @@ Draw help computer.
 void HelpComputer (edict_t *ent)
 {
 	char	string[1024];
-	char	*sk;
+	/*char* sk;
 
 	if (skill->value == 0)
 		sk = "easy";
@@ -347,7 +352,10 @@ void HelpComputer (edict_t *ent)
 		level.killed_monsters, level.total_monsters, 
 		level.found_goals, level.total_goals,
 		level.found_secrets, level.total_secrets);
+	*/
 
+	Com_sprintf(string, sizeof(string),
+		"xv 32 yv 8 picn player ");
 	gi.WriteByte (svc_layout);
 	gi.WriteString (string);
 	gi.unicast (ent, true);

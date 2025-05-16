@@ -1049,6 +1049,7 @@ void Cmd_UseAbility(edict_t* ent)
 	case CLASS_WAR:
 		if (ent->client->pers.abilityTime + 12 > level.time)
 			break;
+		ent->client->pers.abilityTime = level.time;
 		//ent->client->pers.ogSpeed = ent->moveinfo.speed;
 		//ent->moveinfo.current_speed *= 3;
 		switch (ent->client->pers.level)
@@ -1082,6 +1083,7 @@ void Cmd_UseAbility(edict_t* ent)
 	case CLASS_TACT:
 		if (ent->client->pers.abilityTime + 5 > level.time)
 			break;
+		ent->client->pers.abilityTime = level.time;
 		switch (ent->client->pers.level)
 		{
 		case 1:
@@ -1108,6 +1110,7 @@ void Cmd_UseAbility(edict_t* ent)
 	case CLASS_TANK:
 		if (ent->client->pers.abilityTime + 20 > level.time)
 			break;
+		ent->client->pers.abilityTime = level.time;
 		switch (ent->client->pers.level)
 		{
 		case 1:
@@ -1139,6 +1142,7 @@ void Cmd_UseAbility(edict_t* ent)
 	case CLASS_SNIPE:
 		if (ent->client->pers.abilityTime + 12 > level.time)
 			break;
+		ent->client->pers.abilityTime = level.time;
 		switch (ent->client->pers.level)
 		{
 		case 1:
@@ -1171,6 +1175,7 @@ void Cmd_UseAbility(edict_t* ent)
 		if (ent->client->pers.abilityTime + 20  > level.time)
 			break;
 		//gi.cprintf(ent, PRINT_HIGH, "There are %i clients to check\n", maxclients->value);
+		ent->client->pers.abilityTime = level.time;
 		switch (ent->client->pers.level)
 		{
 		case 1:
@@ -1255,7 +1260,7 @@ void Cmd_UseAbility(edict_t* ent)
 			break;
 		}
 	}
-	ent->client->pers.abilityTime = level.time;
+	//ent->client->pers.abilityTime = level.time;
 	
 }
 
